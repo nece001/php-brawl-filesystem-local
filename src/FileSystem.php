@@ -69,7 +69,7 @@ class FileSystem extends FileSystemAbstract
      * @DateTime 2023-06-17
      * 
      * @param string $path 相对路径
-     * @param int $expires 过期时间
+     * @param int $expires 过期时间（秒）
      *
      * @return string
      */
