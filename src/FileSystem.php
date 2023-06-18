@@ -69,27 +69,13 @@ class FileSystem extends FileSystemAbstract
      * @DateTime 2023-06-17
      * 
      * @param string $path 相对路径
+     * @param int $expires 过期时间
      *
      * @return string
      */
-    public function getSignUrl(string $path): string
+    public function buildPreSignedUrl(string $path, $expires = null): string
     {
-        return $this->base_url . '/' . str_replace('\\', '/', $path);
-    }
-
-    /**
-     * 获取临时签名url
-     *
-     * @Author nece001@163.com
-     * @DateTime 2023-06-17
-     * 
-     * @param string $path 相对路径
-     *
-     * @return string
-     */
-    public function getTempSignUrl(string $path): string
-    {
-        return $this->getSignUrl($path);
+        return $this->buildUrl($path, $expires);
     }
 
     /**
@@ -126,14 +112,14 @@ class FileSystem extends FileSystemAbstract
      * @Author nece001@163.com
      * @DateTime 2023-06-17
      *
-     * @param string $path
+     * @param string $path 相对路径（已存在的文件）
      * @param string $content
      *
      * @return void
      */
     public function append(string $path, string $content): void
     {
-        $filename = $this->buildPathWithSubPath($path);
+        $filename = $this->buildPath($path);
 
         if (file_exists($filename)) {
             if (!is_writable($filename)) {
@@ -208,19 +194,19 @@ class FileSystem extends FileSystemAbstract
      * @Author nece001@163.com
      * @DateTime 2023-06-17
      *
-     * @param string $source 绝对路径
+     * @param string $local 绝对路径
      * @param string $destination 相对路径
      *
      * @return void
      */
-    public function upload(string $source, string $destination): void
+    public function upload(string $local, string $destination): void
     {
         $destination = $this->buildPathWithSubPath($destination);
 
         $this->mkDir(dirname($this->real_path));
 
-        if (is_uploaded_file($source)) {
-            if (!move_uploaded_file($source, $destination)) {
+        if (is_uploaded_file($local)) {
+            if (!move_uploaded_file($local, $destination)) {
                 throw new FileSystemException('文件上传失败');
             }
         } else {
