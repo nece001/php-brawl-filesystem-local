@@ -103,7 +103,7 @@ class FileSystem extends FileSystemAbstract
 
         file_put_contents($filename, $content);
 
-        $this->setUri($this->real_path);
+        $this->setUri($filename);
     }
 
     /**
@@ -131,7 +131,7 @@ class FileSystem extends FileSystemAbstract
 
         file_put_contents($filename, $content, FILE_APPEND);
 
-        $this->setUri($this->real_path);
+        $this->setUri($filename);
     }
 
     /**
